@@ -1,4 +1,4 @@
-Feature: Comprar produto no site Petz
+Feature: Validar preco do produto no site Petz
 
   Scenario: CT01 - Validar valor do produto na sacola
     Given que o usuario acessa o site da Petz

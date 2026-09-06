@@ -1,14 +1,17 @@
 package steps;
 
+import hooks.Hooks;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pages.HomePage;
 
-public class CompraProdutoSteps {
+public class ValidacaoPrecoProdutoSteps {
 
     @Given("que o usuario acessa o site da Petz")
     public void queOUsuarioAcessaOSiteDaPetz() {
-        System.out.println("Acessando o site da Petz");
+        HomePage homePage = new HomePage(Hooks.getDriver());
+        homePage.acessar();
     }
 
     @When("seleciona o produto {string}")
