@@ -1,0 +1,22 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Maven
+target/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# Configurações locais e segredos
+.env
+.env.*
+!.env.example
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
