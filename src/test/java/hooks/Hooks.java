@@ -51,34 +51,38 @@ public class Hooks {
         }
 
         byte[] screenshot = ((TakesScreenshot) driver)
-                .getScreenshotAs(OutputType.BYTES);
+            .getScreenshotAs(OutputType.BYTES);
 
         String identificador = obterIdentificadorCenario();
-        String nomeCompleto = identificador + "_" + nomeEvidencia;
 
         if (scenarioAtual != null) {
             scenarioAtual.attach(
-                    screenshot,
-                    "image/png",
-                    nomeCompleto
+                screenshot,
+                "image/png",
+                identificador + "_" + nomeEvidencia
             );
         }
 
         try {
-            Path pastaEvidencias = Paths.get("target", "evidencias");
+            Path pastaEvidencias = Paths.get(
+                "target",
+                "evidencias",
+                identificador
+            );
+
             Files.createDirectories(pastaEvidencias);
 
-            String nomeArquivo = nomeCompleto
-                    .replaceAll("[^a-zA-Z0-9-_]", "_");
+            String nomeArquivo = nomeEvidencia
+                .replaceAll("[^a-zA-Z0-9-_]", "_");
 
             Path arquivo = pastaEvidencias.resolve(
-                    nomeArquivo + ".png"
+                nomeArquivo + ".png"
             );
 
             Files.write(arquivo, screenshot);
         } catch (IOException e) {
             System.out.println(
-                    "Não foi possível salvar a evidência: " + e.getMessage()
+                "Não foi possível salvar a evidência: " + e.getMessage()
             );
         }
     }
@@ -89,13 +93,13 @@ public class Hooks {
         }
 
         Matcher matcher = Pattern.compile("CT\\d+")
-                .matcher(scenarioAtual.getName());
+            .matcher(scenarioAtual.getName());
 
         if (matcher.find()) {
             return matcher.group();
         }
 
         return scenarioAtual.getName()
-                .replaceAll("[^a-zA-Z0-9-_]", "_");
+            .replaceAll("[^a-zA-Z0-9-_]", "_");
     }
 }
