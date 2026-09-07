@@ -21,14 +21,14 @@ public class ValidacaoPrecoProdutoSteps {
         homePage = new HomePage(Hooks.getDriver());
         homePage.acessar();
 
-        Hooks.salvarEvidencia("CT01_01_home");
+        Hooks.salvarEvidencia("01_home");
     }
 
     @When("seleciona o produto {string}")
     public void selecionaOProduto(String nomeProduto) {
         homePage.buscarProduto(nomeProduto);
 
-        Hooks.salvarEvidencia("CT01_02_resultado_busca");
+        Hooks.salvarEvidencia("02_resultado_busca");
 
         homePage.selecionarProduto(nomeProduto);
 
@@ -37,7 +37,7 @@ public class ValidacaoPrecoProdutoSteps {
 
         System.out.println("Preço capturado na página do produto: " + precoPaginaProduto);
 
-        Hooks.salvarEvidencia("CT01_03_produto_preco");
+        Hooks.salvarEvidencia("03_produto_preco");
     }
 
     @When("adiciona o produto na sacola")
@@ -58,7 +58,7 @@ public class ValidacaoPrecoProdutoSteps {
         System.out.println("Preço na página do produto: " + precoPaginaProduto);
         System.out.println("Preço unitário na sacola: " + precoSacola);
 
-        Hooks.salvarEvidencia("CT01_04_sacola_preco");
+        Hooks.salvarEvidencia("04_sacola_preco");
 
         Assertions.assertEquals(
                 precoPaginaProduto,

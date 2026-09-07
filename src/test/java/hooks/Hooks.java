@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Hooks {
 
@@ -30,7 +32,7 @@ public class Hooks {
     public void finalizarCenario(Scenario scenario) {
         if (driver != null) {
             if (scenario.isFailed()) {
-                salvarEvidencia("CT01_falha");
+                salvarEvidencia("falha");
             }
 
             driver.quit();
@@ -51,11 +53,14 @@ public class Hooks {
         byte[] screenshot = ((TakesScreenshot) driver)
                 .getScreenshotAs(OutputType.BYTES);
 
+        String identificador = obterIdentificadorCenario();
+        String nomeCompleto = identificador + "_" + nomeEvidencia;
+
         if (scenarioAtual != null) {
             scenarioAtual.attach(
                     screenshot,
                     "image/png",
-                    nomeEvidencia
+                    nomeCompleto
             );
         }
 
@@ -63,7 +68,7 @@ public class Hooks {
             Path pastaEvidencias = Paths.get("target", "evidencias");
             Files.createDirectories(pastaEvidencias);
 
-            String nomeArquivo = nomeEvidencia
+            String nomeArquivo = nomeCompleto
                     .replaceAll("[^a-zA-Z0-9-_]", "_");
 
             Path arquivo = pastaEvidencias.resolve(
@@ -76,5 +81,21 @@ public class Hooks {
                     "Não foi possível salvar a evidência: " + e.getMessage()
             );
         }
+    }
+
+    private static String obterIdentificadorCenario() {
+        if (scenarioAtual == null) {
+            return "cenario";
+        }
+
+        Matcher matcher = Pattern.compile("CT\\d+")
+                .matcher(scenarioAtual.getName());
+
+        if (matcher.find()) {
+            return matcher.group();
+        }
+
+        return scenarioAtual.getName()
+                .replaceAll("[^a-zA-Z0-9-_]", "_");
     }
 }
