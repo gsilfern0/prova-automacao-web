@@ -48,13 +48,13 @@ public class ValidacaoPrecoProdutoSteps {
     public void validarValorDoProdutoNaSacola() {
         String precoSacola = sacolaPage.obterPrecoUnitarioProduto();
 
-        System.out.println("Preco na pagina do produto: " + precoPaginaProduto);
-        System.out.println("Preco unitario na sacola: " + precoSacola);
+        System.out.println("Preço na página do produto: " + precoPaginaProduto);
+        System.out.println("Preço unitário na sacola: " + precoSacola);
 
         Assertions.assertEquals(
                 precoPaginaProduto,
                 precoSacola,
-                "O preco do produto na sacola esta diferente do preco exibido na pagina do produto."
+                "O preço do produto na sacola está diferente do preço exibido na página do produto."
         );
     }
 }
