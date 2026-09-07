@@ -43,12 +43,18 @@ public class ValidacaoPrecoProdutoSteps {
     @When("adiciona o produto na sacola")
     public void adicionaOProdutoNaSacola() {
         produtoPage.adicionarNaSacola();
+
+        Hooks.salvarEvidencia("04_produto_adicionado");
     }
 
     @When("acessa a sacola")
     public void acessaASacola() {
         produtoPage.acessarSacola();
+
         sacolaPage = new SacolaPage(Hooks.getDriver());
+        sacolaPage.aguardarCarregamento();
+
+        Hooks.salvarEvidencia("05_sacola");
     }
 
     @Then("o valor do produto na sacola deve ser igual ao valor exibido na pagina do produto")
@@ -58,12 +64,12 @@ public class ValidacaoPrecoProdutoSteps {
         System.out.println("Preço na página do produto: " + precoPaginaProduto);
         System.out.println("Preço unitário na sacola: " + precoSacola);
 
-        Hooks.salvarEvidencia("04_sacola_preco");
+        Hooks.salvarEvidencia("06_sacola_preco");
 
         Assertions.assertEquals(
-                precoPaginaProduto,
-                precoSacola,
-                "O preço do produto na sacola está diferente do preço exibido na página do produto."
+            precoPaginaProduto,
+            precoSacola,
+            "O preço do produto na sacola está diferente do preço exibido na página do produto."
         );
     }
 }

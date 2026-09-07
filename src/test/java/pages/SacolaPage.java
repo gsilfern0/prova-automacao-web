@@ -13,16 +13,22 @@ public class SacolaPage {
     private final WebDriverWait wait;
 
     private final By precoUnitarioProduto = By.cssSelector(
-            "[data-testid='ptz-bag-product-unit-price'] .money"
+        "[data-testid='ptz-bag-product-unit-price'] .money"
     );
 
     public SacolaPage(WebDriver driver) {
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
+    public void aguardarCarregamento() {
+        wait.until(
+            ExpectedConditions.presenceOfElementLocated(precoUnitarioProduto)
+        );
+    }
+
     public String obterPrecoUnitarioProduto() {
         WebElement preco = wait.until(
-                ExpectedConditions.presenceOfElementLocated(precoUnitarioProduto)
+            ExpectedConditions.presenceOfElementLocated(precoUnitarioProduto)
         );
 
         return preco.getDomProperty("textContent").trim();

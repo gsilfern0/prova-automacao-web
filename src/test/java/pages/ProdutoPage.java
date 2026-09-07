@@ -13,15 +13,15 @@ public class ProdutoPage {
     private final WebDriverWait wait;
 
     private final By precoProduto = By.cssSelector(
-            "#ecom-produto-price-default > p:first-of-type"
+        "#ecom-produto-price-default > p:first-of-type"
     );
 
     private final By botaoAdicionarSacola = By.cssSelector(
-            "[data-testid='add-to-cart-button']"
+        "[data-testid='add-to-cart-button']"
     );
 
     private final By botaoIrParaSacola = By.cssSelector(
-            "[data-testid='drawer-bag-checkout-button']"
+        "[data-testid='drawer-bag-checkout-button']"
     );
 
     public ProdutoPage(WebDriver driver) {
@@ -30,7 +30,7 @@ public class ProdutoPage {
 
     public String obterPreco() {
         WebElement preco = wait.until(
-                ExpectedConditions.visibilityOfElementLocated(precoProduto)
+            ExpectedConditions.visibilityOfElementLocated(precoProduto)
         );
 
         return preco.getText().trim();
@@ -38,15 +38,19 @@ public class ProdutoPage {
 
     public void adicionarNaSacola() {
         WebElement botao = wait.until(
-                ExpectedConditions.elementToBeClickable(botaoAdicionarSacola)
+            ExpectedConditions.elementToBeClickable(botaoAdicionarSacola)
         );
 
         botao.click();
+
+        wait.until(
+            ExpectedConditions.visibilityOfElementLocated(botaoIrParaSacola)
+        );
     }
 
     public void acessarSacola() {
         WebElement botao = wait.until(
-                ExpectedConditions.elementToBeClickable(botaoIrParaSacola)
+            ExpectedConditions.elementToBeClickable(botaoIrParaSacola)
         );
 
         botao.click();
