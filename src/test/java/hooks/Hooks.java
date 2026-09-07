@@ -2,27 +2,79 @@ package hooks;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Hooks {
 
     private static WebDriver driver;
+    private static Scenario scenarioAtual;
 
     @Before
-    public void iniciarNavegador() {
+    public void iniciarNavegador(Scenario scenario) {
+        scenarioAtual = scenario;
+
         driver = new ChromeDriver();
         driver.manage().window().maximize();
     }
 
     @After
-    public void fecharNavegador() {
+    public void finalizarCenario(Scenario scenario) {
         if (driver != null) {
+            if (scenario.isFailed()) {
+                salvarEvidencia("CT01_falha");
+            }
+
             driver.quit();
+            driver = null;
+            scenarioAtual = null;
         }
     }
 
     public static WebDriver getDriver() {
         return driver;
+    }
+
+    public static void salvarEvidencia(String nomeEvidencia) {
+        if (driver == null) {
+            return;
+        }
+
+        byte[] screenshot = ((TakesScreenshot) driver)
+                .getScreenshotAs(OutputType.BYTES);
+
+        if (scenarioAtual != null) {
+            scenarioAtual.attach(
+                    screenshot,
+                    "image/png",
+                    nomeEvidencia
+            );
+        }
+
+        try {
+            Path pastaEvidencias = Paths.get("target", "evidencias");
+            Files.createDirectories(pastaEvidencias);
+
+            String nomeArquivo = nomeEvidencia
+                    .replaceAll("[^a-zA-Z0-9-_]", "_");
+
+            Path arquivo = pastaEvidencias.resolve(
+                    nomeArquivo + ".png"
+            );
+
+            Files.write(arquivo, screenshot);
+        } catch (IOException e) {
+            System.out.println(
+                    "Não foi possível salvar a evidência: " + e.getMessage()
+            );
+        }
     }
 }
